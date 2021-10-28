@@ -36,7 +36,7 @@ curl --location --request POST 'http://localhost:8080/allowMe/gerarBilling' \
 ```
 # Testes Unitários
 
-Executar a classe SystemLogApplicationTests.java com JUnit Teste para validar todos os endpoints da classe LogControle.java
+Executar a classe AllowmeApplicationTests.java com JUnit.
 
 Emerson Rafael Maia Melo – emerson.rafael.maia.melo@gmail.com.
 
