@@ -1,11 +1,3 @@
-# SystemLog-Front
-
-## Installation
-
-```sh
-npm install
-```
-
 # Allowme
 
 Configuração de base no arquivo application.properties
@@ -15,23 +7,27 @@ spring.datasource.url=jdbc:postgresql://127.0.0.1:5432/challenge-db
 spring.datasource.username=allowme
 spring.datasource.password=password
 ```
-
 ## Requisitos
-
-Container para rodar a aplicação no [Tomcat 9](https://tomcat.apache.org/download-90.cgi).
-
-Veja o [pom.xml](https://github.com/EmersonRafael/SystemLog/blob/master/SystemLog/pom.xml) para saber as bibliotecas que estão configuradas.
-
 
 # Banco de dados
 
-[Scripts das tabelas](https://github.com/EmersonRafael/SystemLog/tree/master/Script)
+[Scripts das tabelas](https://github.com/EmersonRafael/allowme/tree/master/src/main/resources/Scripts)
 
+# Teste gerarBilling 
+
+```sh
+curl --location --request POST 'http://localhost:8080/allowMe/gerarBilling' \
+--header 'Authorization: Basic dGVtcGVzdDp0ZW1wZXN0' \
+--header 'Content-Type: application/json' \
+--header 'Cookie: JSESSIONID=D1B4763CFDD44417ABBD9B1C2DC0D11D' \
+--data-raw '{
+    "start":"2021-10-28",
+    "end": "2021-10-28"
+}'
+```
 # Testes Unitários
 
 Executar a classe SystemLogApplicationTests.java com JUnit Teste para validar todos os endpoints da classe LogControle.java
-
-
 
 Emerson Rafael Maia Melo – emerson.rafael.maia.melo@gmail.com.
 
