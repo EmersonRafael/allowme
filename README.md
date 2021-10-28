@@ -3,9 +3,18 @@
 Configuração de base no arquivo application.properties
 
 ```sh
+schedule.jobs.cronExp= 0 0/1 * * * *
+app.usuario=tempest
+app.senha=tempest
+
 spring.datasource.url=jdbc:postgresql://127.0.0.1:5432/challenge-db
 spring.datasource.username=allowme
 spring.datasource.password=password
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.show-sql=false
+spring.datasource.hikari.connectionTimeout=20000
+spring.datasource.hikari.maximumPoolSize=5
+spring.datasource.hikari.maximum-pool-size=10 
 ```
 ## Requisitos
 

@@ -23,13 +23,15 @@ public class AllowMeController {
 	
 	@PostMapping("/gerarBilling")
 	public ResponseEntity<Object> gerarBilling(@RequestBody Map<String, Object> request){
-		
 		try {
 			allowMeService.gerarBilling(request);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao tentar gerar o billing!");
+			if(e.getMessage().equals("Não existem dados para o período")) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem dados para o período!");
+			}else {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao tentar gerar o billing!");
+			}
 		}
-		
 		return ResponseEntity.status(HttpStatus.OK).body("Billing gerado com sucesso!");
 	}
 	

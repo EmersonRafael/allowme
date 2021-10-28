@@ -53,22 +53,30 @@ public class AllowMeServiceImpl implements AllowMeService{
 	}
 	
 	@Scheduled(cron = "${schedule.jobs.cronExp}")
-	private void iniciaEnriquecimento() {
-		logger.info("Iniciar Scheduled "+ LocalDateTime.now());
-		
-		String weatherRecife = weatherService.getToWeather("Recife,pernambuco");
-		
-		if(weatherRecife != null)
-			geolocationService.getToGeolocation(JsonPath.using(conf).parse(weatherRecife).read("$.coord.lat").toString(), 
-					JsonPath.using(conf).parse(weatherRecife).read("$.coord.lon").toString());
-		
-		String weatherSaoPaulo = weatherService.getToWeather("São Paulo,São Paulo");
-		
-		if(weatherSaoPaulo != null)
-			geolocationService.getToGeolocation(JsonPath.using(conf).parse(weatherSaoPaulo).read("$.coord.lat").toString(), 
-					JsonPath.using(conf).parse(weatherSaoPaulo).read("$.coord.lon").toString());
-		
-		logger.info("Final Scheduled "+ LocalDateTime.now());
+	public void iniciaEnriquecimento() {
+		logger.info("Iniciar Scheduled " + LocalDateTime.now());
+
+		try {
+
+			String weatherRecife = weatherService.getToWeather("Recife,pernambuco");
+
+			if (weatherRecife != null)
+				geolocationService.getToGeolocation(
+						JsonPath.using(conf).parse(weatherRecife).read("$.coord.lat").toString(),
+						JsonPath.using(conf).parse(weatherRecife).read("$.coord.lon").toString());
+
+			String weatherSaoPaulo = weatherService.getToWeather("São Paulo,São Paulo");
+
+			if (weatherSaoPaulo != null)
+				geolocationService.getToGeolocation(
+						JsonPath.using(conf).parse(weatherSaoPaulo).read("$.coord.lat").toString(),
+						JsonPath.using(conf).parse(weatherSaoPaulo).read("$.coord.lon").toString());
+
+		} catch (Exception e) {
+			logger.info("Final Scheduled " + e.getMessage());
+		}
+
+		logger.info("Final Scheduled " + LocalDateTime.now());
 	}
 
 	public void gerarBilling(Map<String, Object> request) throws Exception{
@@ -85,6 +93,11 @@ public class AllowMeServiceImpl implements AllowMeService{
 			Double totalPrice = 0D;
 			Long totalRequstApi1 = 0L, totalRequstApi2 = 0L;
 			
+			if(ListservRequest.isEmpty()) {
+				logger.info("Não existem dados para o período "+request.get("start")+" á "+request.get("end"));
+				throw new Exception("Não existem dados para o período");
+			}
+					
 			for (ServiceRequests servReq : ListservRequest) {
 				totalPrice += servReq.getServico().getPricePerRequest();
 				
@@ -111,7 +124,9 @@ public class AllowMeServiceImpl implements AllowMeService{
 			billingSummaryService.persitBillingSummary(bilSumAPI2);
 			
 			logger.info("Finaliza Geração Billing "+ LocalDateTime.now());
+			
 		} catch (Exception e) {
+			logger.error("Error gerarBilling "+e.getMessage());
 			throw new Exception(e.getMessage());
 		}
 		
